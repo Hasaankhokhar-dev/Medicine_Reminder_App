@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1001399130333",
+    "project_id": "med-reminder-app-c5658",
+    "storage_bucket": "med-reminder-app-c5658.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001399130333:android:3ce8ad057805e7f2582334",
+        "android_client_info": {
+          "package_name": "com.example.med_reminder_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001399130333-lr6p4r7vm022qmm12plg5rntuog85ais.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.med_reminder_app",
+            "certificate_hash": "0911af013f8a89693c8493c419da9f6c0ebc21db"
+          }
+        },
+        {
+          "client_id": "1001399130333-6520upkk423n7oob3mgbe3lcike58lir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFtPVq1QQ2m5gIHoORTK_3hkZD4YKQags"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001399130333-6520upkk423n7oob3mgbe3lcike58lir.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1001399130333-6hcgbeesr86qkgk9i8itbnjji3svc6ot.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.medReminderApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

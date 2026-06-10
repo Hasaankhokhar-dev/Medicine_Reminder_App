@@ -22,7 +22,7 @@ class AuthController extends GetxController {
     AuthService.authStateChanges.listen((firebaseUser) {
       if (firebaseUser != null) {
         currentUser.value = UserModel.fromFirebase(firebaseUser);
-        Get.offAllNamed(AppRoutes.home);
+      //  Get.offAllNamed(AppRoutes.home);
       } else {
         currentUser.value = null;
         Get.offAllNamed(AppRoutes.login);
@@ -114,10 +114,7 @@ class AuthController extends GetxController {
     }
     return true;
   }
-
-  // ============================================
-  // SIGN UP
-  // ============================================
+  
   Future<void> signUp(String name, String email, String password) async {
     final isNameValid     = _validateName(name);
     final isEmailValid    = _validateEmail(email);

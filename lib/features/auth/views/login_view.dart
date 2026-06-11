@@ -171,7 +171,7 @@ class _LoginViewState extends State<LoginView> {
                                   ),
                                   suffixIcon: GestureDetector(
                                     onTap: () => setState(
-                                        () => _obscurePass = !_obscurePass),
+                                            () => _obscurePass = !_obscurePass),
                                     child: Padding(
                                       padding: EdgeInsets.all(12.w),
                                       child: SvgPicture.asset(
@@ -224,6 +224,7 @@ class _LoginViewState extends State<LoginView> {
                             ],
                           );
                         }),
+                        SizedBox(height: 6.h),
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
@@ -242,23 +243,23 @@ class _LoginViewState extends State<LoginView> {
                         SizedBox(height: 4.h),
                         Obx(() => ctrl.errorMessage.value.isNotEmpty
                             ? Padding(
-                                padding: EdgeInsets.only(bottom: 8.h),
-                                child: Text(
-                                  ctrl.errorMessage.value,
-                                  style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.error,
-                                  ),
-                                ),
-                              )
+                          padding: EdgeInsets.only(bottom: 8.h),
+                          child: Text(
+                            ctrl.errorMessage.value,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.error,
+                            ),
+                          ),
+                        )
                             : const SizedBox.shrink()),
                         Obx(() => PrimaryButton(
-                              label: AppStrings.signIn,
-                              isLoading: ctrl.isLoading.value,
-                              onPressed: () => ctrl.login(
-                                _emailCtrl.text,
-                                _passCtrl.text,
-                              ),
-                            )),
+                          label: AppStrings.signIn,
+                          isLoading: ctrl.isLoading.value,
+                          onPressed: () => ctrl.login(
+                            _emailCtrl.text,
+                            _passCtrl.text,
+                          ),
+                        )),
                         SizedBox(height: 20.h),
                         Row(
                           children: [

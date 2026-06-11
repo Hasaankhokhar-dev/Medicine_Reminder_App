@@ -7,7 +7,7 @@ class AppAssets {
   static const lockIcon   = 'assets/svg/lock_icon.svg';
   static const eyeOffIcon = 'assets/svg/eye_off_icon.svg';
   static const eyeOnIcon  = 'assets/svg/eye_on_icon.svg';
-  static const personIcon = 'assets/svg/person_icon.svg';
+  static const personIcon = 'assets/svg/profile_icon.svg';
   static const signInIcon = 'assets/svg/signin_icon.svg';
   static const googleIcon = 'assets/svg/google_icon.svg';
 }

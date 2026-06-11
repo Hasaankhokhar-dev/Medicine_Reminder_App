@@ -1,20 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
 import '../../../routes/app_routes.dart';
 
 class AuthController extends GetxController {
+  var currentUser = Rx<UserModel?>(null);
+  var isLoading = false.obs;
+  var errorMessage = ''.obs;
+  var emailError = ''.obs;
+  var passwordError = ''.obs;
+  var nameError = ''.obs;
 
-  var currentUser    = Rx<UserModel?>(null);
-  var isLoading      = false.obs;
-  var errorMessage   = ''.obs;
-  var emailError     = ''.obs;
-  var passwordError  = ''.obs;
-  var nameError      = ''.obs;
-
-  var passwordStrength      = 0.obs;
+  var passwordStrength = 0.obs;
   var passwordStrengthLabel = ''.obs;
+
+  // Flag taake signup ke waqt auto-redirect na ho
+  bool _isSigningUp = false;
 
   @override
   void onInit() {
@@ -22,10 +25,16 @@ class AuthController extends GetxController {
     AuthService.authStateChanges.listen((firebaseUser) {
       if (firebaseUser != null) {
         currentUser.value = UserModel.fromFirebase(firebaseUser);
-      //  Get.offAllNamed(AppRoutes.home);
+        
+        // Agar signup nahi ho raha to Splash par bhejen (Login ya Google Signin ke baad)
+        if (!_isSigningUp) {
+          if (Get.currentRoute != AppRoutes.splash) {
+            Get.offAllNamed(AppRoutes.splash);
+          }
+        }
       } else {
         currentUser.value = null;
-        Get.offAllNamed(AppRoutes.login);
+        // Navigation logic for logout is handled in AuthService or here if needed
       }
     });
   }
@@ -40,7 +49,7 @@ class AuthController extends GetxController {
     int score = 0;
 
     // Length checks
-    if (password.length >= 6)  score++;
+    if (password.length >= 6) score++;
     if (password.length >= 10) score++;
 
     // Uppercase check — A-Z
@@ -114,24 +123,42 @@ class AuthController extends GetxController {
     }
     return true;
   }
-  
+
   Future<void> signUp(String name, String email, String password) async {
-    final isNameValid     = _validateName(name);
-    final isEmailValid    = _validateEmail(email);
+    final isNameValid = _validateName(name);
+    final isEmailValid = _validateEmail(email);
     final isPasswordValid = _validatePassword(password);
     if (!isNameValid || !isEmailValid || !isPasswordValid) return;
 
     try {
-      isLoading.value    = true;
+      _isSigningUp = true; 
+      isLoading.value = true;
       errorMessage.value = '';
 
       await AuthService.signUp(email.trim(), password.trim());
-
       await AuthService.updateDisplayName(name.trim());
+      
+      // Automatic login rokne ke liye logout kiya
+      await AuthService.logout();
+      _isSigningUp = false;
+
+      Get.snackbar(
+        'Success',
+        'Account created successfully! Please login to continue.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+
+      // Login screen par wapas bheja (is se fields empty ho jayengi)
+      Get.offAllNamed(AppRoutes.login);
 
     } on FirebaseAuthException catch (e) {
+      _isSigningUp = false;
       errorMessage.value = _getFirebaseError(e.code);
     } catch (e) {
+      _isSigningUp = false;
       errorMessage.value = 'Something went wrong. Try again';
     } finally {
       isLoading.value = false;
@@ -139,17 +166,15 @@ class AuthController extends GetxController {
   }
 
   Future<void> login(String email, String password) async {
-    // Validate
-    final isEmailValid    = _validateEmail(email);
+    final isEmailValid = _validateEmail(email);
     final isPasswordValid = _validatePassword(password);
     if (!isEmailValid || !isPasswordValid) return;
 
     try {
-      isLoading.value    = true;
+      _isSigningUp = false;
+      isLoading.value = true;
       errorMessage.value = '';
-
       await AuthService.login(email.trim(), password.trim());
-
     } on FirebaseAuthException catch (e) {
       errorMessage.value = _getFirebaseError(e.code);
     } catch (e) {
@@ -161,12 +186,10 @@ class AuthController extends GetxController {
 
   Future<void> signInWithGoogle() async {
     try {
-      isLoading.value    = true;
+      _isSigningUp = false;
+      isLoading.value = true;
       errorMessage.value = '';
-
       await AuthService.signInWithGoogle();
-
-
     } on FirebaseAuthException catch (e) {
       errorMessage.value = _getFirebaseError(e.code);
     } catch (e) {
@@ -181,14 +204,16 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await AuthService.logout();
   }
+
   void clearErrors() {
-    errorMessage.value  = '';
-    emailError.value    = '';
+    errorMessage.value = '';
+    emailError.value = '';
     passwordError.value = '';
-    nameError.value     = '';
+    nameError.value = '';
   }
+
   void resetPasswordStrength() {
-    passwordStrength.value      = 0;
+    passwordStrength.value = 0;
     passwordStrengthLabel.value = '';
   }
 

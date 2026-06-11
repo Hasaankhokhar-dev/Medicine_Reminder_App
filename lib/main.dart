@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,8 +36,10 @@ class MyApp extends StatelessWidget {
           initialBinding: BindingsBuilder(() {
             Get.put(AuthController());
           }),
-          initialRoute: AppRoutes.login,
           getPages: AppRoutes.pages,
+          initialRoute: FirebaseAuth.instance.currentUser != null
+              ? AppRoutes.splash
+              : AppRoutes.login,
         );
       },
     );

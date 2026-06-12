@@ -16,7 +16,6 @@ class AuthController extends GetxController {
   var passwordStrength = 0.obs;
   var passwordStrengthLabel = ''.obs;
 
-  // Flag taake signup ke waqt auto-redirect na ho
   bool _isSigningUp = false;
 
   @override
@@ -34,7 +33,6 @@ class AuthController extends GetxController {
         }
       } else {
         currentUser.value = null;
-        // Navigation logic for logout is handled in AuthService or here if needed
       }
     });
   }
@@ -96,7 +94,6 @@ class AuthController extends GetxController {
       emailError.value = 'Email cannot be empty';
       return false;
     }
-    // Proper email format — example@gmail.com
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     );

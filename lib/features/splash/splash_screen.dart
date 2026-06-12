@@ -97,7 +97,7 @@ class SplashScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14.r),
                     child: InkWell(
                       onTap: () {
-                        // TODO: Get.offAllNamed(AppRoutes.login);
+                        // Get.toNamed(AppRoutes.home);
                       },
                       borderRadius: BorderRadius.circular(14.r),
                       child: Padding(

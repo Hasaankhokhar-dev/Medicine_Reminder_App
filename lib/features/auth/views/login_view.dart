@@ -38,8 +38,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      body: SafeArea(
-        child: Column(
+      body: Column(
           children: [
             AuthHero(
               heading: AppStrings.welcomeBack,
@@ -314,7 +313,6 @@ class _LoginViewState extends State<LoginView> {
             ),
           ],
         ),
-      ),
     );
   }
 }

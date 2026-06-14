@@ -37,9 +37,7 @@ class MyApp extends StatelessWidget {
             Get.put(AuthController());
           }),
           getPages: AppRoutes.pages,
-          initialRoute: FirebaseAuth.instance.currentUser != null
-              ? AppRoutes.splash
-              : AppRoutes.login,
+          initialRoute: AppRoutes.splash,
         );
       },
     );

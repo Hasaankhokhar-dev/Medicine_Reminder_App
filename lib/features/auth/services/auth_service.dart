@@ -4,17 +4,17 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   AuthService._();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   static Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  static Future<UserCredential> signUp(String email, String password) async {
-    return await _auth.createUserWithEmailAndPassword(
+  static Future<UserCredential> signUp(String email, String password, String name) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-  }
-
-  static Future<void> updateDisplayName(String name) async {
-    await _auth.currentUser?.updateDisplayName(name);
+    await credential.user?.updateDisplayName(name);
+    return credential;
   }
 
   static Future<UserCredential> login(String email, String password) async {
@@ -25,15 +25,13 @@ class AuthService {
   }
 
   static Future<UserCredential> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
     if (googleUser == null) {
-      throw Exception('Google Sign cancel by user');
+      throw Exception('Google Sign cancelled by user');
     }
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
@@ -44,7 +42,9 @@ class AuthService {
   }
 
   static Future<void> logout() async {
-    await GoogleSignIn().signOut();
-    await _auth.signOut();
+    await Future.wait([
+      _googleSignIn.signOut(),
+      _auth.signOut(),
+    ]);
   }
 }

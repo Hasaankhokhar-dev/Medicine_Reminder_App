@@ -24,11 +24,10 @@ class AuthController extends GetxController {
     AuthService.authStateChanges.listen((firebaseUser) {
       if (firebaseUser != null) {
         currentUser.value = UserModel.fromFirebase(firebaseUser);
-        
-        // Agar signup nahi ho raha to Splash par bhejen (Login ya Google Signin ke baad)
         if (!_isSigningUp) {
-          if (Get.currentRoute != AppRoutes.splash) {
-            Get.offAllNamed(AppRoutes.splash);
+          final route = Get.currentRoute;
+          if (route == AppRoutes.login || route == AppRoutes.signup) {
+            Get.offAllNamed(AppRoutes.home);
           }
         }
       } else {
@@ -46,20 +45,12 @@ class AuthController extends GetxController {
 
     int score = 0;
 
-    // Length checks
     if (password.length >= 6) score++;
     if (password.length >= 10) score++;
-
-    // Uppercase check — A-Z
     if (password.contains(RegExp(r'[A-Z]'))) score++;
-
-    // Number check — 0-9
     if (password.contains(RegExp(r'[0-9]'))) score++;
-
-    // Special character check
     if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) score++;
 
-    // Score → 4 levels
     if (score <= 1) {
       passwordStrength.value = 1;
       passwordStrengthLabel.value = 'Weak';
@@ -104,7 +95,7 @@ class AuthController extends GetxController {
     return true;
   }
 
-  bool _validatePassword(String password) {
+  bool _validatePassword(String password, {bool checkStrength = true}) {
     passwordError.value = '';
     if (password.isEmpty) {
       passwordError.value = 'Password cannot be empty';
@@ -114,7 +105,7 @@ class AuthController extends GetxController {
       passwordError.value = 'Password must be at least 6 characters';
       return false;
     }
-    if (passwordStrength.value < 2) {
+    if (checkStrength && passwordStrength.value < 2) {
       passwordError.value = 'Password is too weak — add numbers or uppercase';
       return false;
     }
@@ -128,27 +119,23 @@ class AuthController extends GetxController {
     if (!isNameValid || !isEmailValid || !isPasswordValid) return;
 
     try {
-      _isSigningUp = true; 
+      _isSigningUp = true;
       isLoading.value = true;
       errorMessage.value = '';
 
-      await AuthService.signUp(email.trim(), password.trim());
-      await AuthService.updateDisplayName(name.trim());
-      
-      // Automatic login rokne ke liye logout kiya
+      await AuthService.signUp(email.trim(), password.trim(), name.trim());
       await AuthService.logout();
       _isSigningUp = false;
 
       Get.snackbar(
         'Success',
-        'Account created successfully! Please login to continue.',
+        'Account created! Please login to continue.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 3),
       );
 
-      // Login screen par wapas bheja (is se fields empty ho jayengi)
       Get.offAllNamed(AppRoutes.login);
 
     } on FirebaseAuthException catch (e) {
@@ -164,7 +151,7 @@ class AuthController extends GetxController {
 
   Future<void> login(String email, String password) async {
     final isEmailValid = _validateEmail(email);
-    final isPasswordValid = _validatePassword(password);
+    final isPasswordValid = _validatePassword(password, checkStrength: false);
     if (!isEmailValid || !isPasswordValid) return;
 
     try {

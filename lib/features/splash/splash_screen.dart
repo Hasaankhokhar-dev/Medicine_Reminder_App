@@ -1,16 +1,53 @@
-// lib/features/splash/view/splash_screen.dart
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../routes/app_routes.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool _showGetStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthAndNavigate();
+  }
+
+  Future<void> _checkAuthAndNavigate() async {
+    // Firebase token load hone ka waqt dete hain
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+    try {
+
+      await FirebaseAuth.instance.currentUser?.reload();
+    } catch (_) {
+
+    }
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // User logged in hai — seedha main screen
+      Get.offAllNamed(AppRoutes.home);
+    } else {
+      // User logged in nahi — Get Started button dikhao
+      if (mounted) {
+        setState(() => _showGetStarted = true);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,48 +111,56 @@ class SplashScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _FeatureChip(
-                    label: AppStrings.chipReminders,
-                  ),
+                  _FeatureChip(label: AppStrings.chipReminders),
                   SizedBox(width: 8.w),
-                  _FeatureChip(
-                    label: AppStrings.chipStats,
-                  ),
+                  _FeatureChip(label: AppStrings.chipStats),
                   SizedBox(width: 8.w),
-                  _FeatureChip(
-                    label: AppStrings.chipAlerts,
-                  ),
+                  _FeatureChip(label: AppStrings.chipAlerts),
                 ],
               ),
               const Spacer(flex: 2),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.w),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Material(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(14.r),
-                    child: InkWell(
-                      onTap: () {
-                        // Get.toNamed(AppRoutes.home);
-                      },
+
+              // Loading ya Get Started — auth check ke baad decide hoga
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                child: _showGetStarted
+                    ? Padding(
+                  key: const ValueKey('btn'),
+                  padding: EdgeInsets.symmetric(horizontal: 32.w),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Material(
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(14.r),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14.h),
-                        child: Center(
-                          child: Text(
-                            AppStrings.getStarted,
-                            style: AppTextStyles.button.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
+                      child: InkWell(
+                        onTap: () => Get.offAllNamed(AppRoutes.login),
+                        borderRadius: BorderRadius.circular(14.r),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
+                          child: Center(
+                            child: Text(
+                              AppStrings.getStarted,
+                              style: AppTextStyles.button.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
+                )
+                    : Padding(
+                  key: const ValueKey('loader'),
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
                 ),
               ),
+
               const Spacer(flex: 1),
             ],
           ),
@@ -127,7 +172,7 @@ class SplashScreen extends StatelessWidget {
 
 class _FeatureChip extends StatelessWidget {
   final String label;
-  const _FeatureChip({ required this.label});
+  const _FeatureChip({required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -136,10 +181,7 @@ class _FeatureChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0x1FFFFFFF),
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          color: const Color(0x33FFFFFF),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0x33FFFFFF), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

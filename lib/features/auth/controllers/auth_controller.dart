@@ -24,9 +24,13 @@ class AuthController extends GetxController {
     AuthService.authStateChanges.listen((firebaseUser) {
       if (firebaseUser != null) {
         currentUser.value = UserModel.fromFirebase(firebaseUser);
+
         if (!_isSigningUp) {
           final route = Get.currentRoute;
-          if (route == AppRoutes.login || route == AppRoutes.signup) {
+
+          if (route == AppRoutes.login ||
+              route == AppRoutes.signup ||
+              route == AppRoutes.splash) {
             Get.offAllNamed(AppRoutes.home);
           }
         }
@@ -36,35 +40,7 @@ class AuthController extends GetxController {
     });
   }
 
-  void checkPasswordStrength(String password) {
-    if (password.isEmpty) {
-      passwordStrength.value = 0;
-      passwordStrengthLabel.value = '';
-      return;
-    }
 
-    int score = 0;
-
-    if (password.length >= 6) score++;
-    if (password.length >= 10) score++;
-    if (password.contains(RegExp(r'[A-Z]'))) score++;
-    if (password.contains(RegExp(r'[0-9]'))) score++;
-    if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) score++;
-
-    if (score <= 1) {
-      passwordStrength.value = 1;
-      passwordStrengthLabel.value = 'Weak';
-    } else if (score == 2) {
-      passwordStrength.value = 2;
-      passwordStrengthLabel.value = 'Fair';
-    } else if (score == 3) {
-      passwordStrength.value = 3;
-      passwordStrengthLabel.value = 'Good';
-    } else {
-      passwordStrength.value = 4;
-      passwordStrengthLabel.value = 'Strong ✓';
-    }
-  }
 
   bool _validateName(String name) {
     nameError.value = '';
@@ -95,7 +71,7 @@ class AuthController extends GetxController {
     return true;
   }
 
-  bool _validatePassword(String password, {bool checkStrength = true}) {
+  bool _validatePassword(String password) {
     passwordError.value = '';
     if (password.isEmpty) {
       passwordError.value = 'Password cannot be empty';
@@ -105,10 +81,7 @@ class AuthController extends GetxController {
       passwordError.value = 'Password must be at least 6 characters';
       return false;
     }
-    if (checkStrength && passwordStrength.value < 2) {
-      passwordError.value = 'Password is too weak — add numbers or uppercase';
-      return false;
-    }
+
     return true;
   }
 
@@ -151,7 +124,7 @@ class AuthController extends GetxController {
 
   Future<void> login(String email, String password) async {
     final isEmailValid = _validateEmail(email);
-    final isPasswordValid = _validatePassword(password, checkStrength: false);
+    final isPasswordValid = _validatePassword(password);
     if (!isEmailValid || !isPasswordValid) return;
 
     try {

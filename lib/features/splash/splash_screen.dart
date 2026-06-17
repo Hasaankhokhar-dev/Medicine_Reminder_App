@@ -27,25 +27,21 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkAuthAndNavigate() async {
-    // Firebase token load hone ka waqt dete hain
-    await Future.delayed(const Duration(milliseconds: 1500));
-
     try {
+      final user = await FirebaseAuth.instance
+          .authStateChanges()
+          .firstWhere((user) => user != null, orElse: () => null)
+          .timeout(const Duration(seconds: 1), onTimeout: () => null);
 
-      await FirebaseAuth.instance.currentUser?.reload();
-    } catch (_) {
+      if (!mounted) return;
 
-    }
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      // User logged in hai — seedha main screen
-      Get.offAllNamed(AppRoutes.home);
-    } else {
-      // User logged in nahi — Get Started button dikhao
-      if (mounted) {
+      if (user != null) {
+        Get.offAllNamed(AppRoutes.home);
+      } else {
         setState(() => _showGetStarted = true);
       }
+    } catch (e) {
+      if (mounted) setState(() => _showGetStarted = true);
     }
   }
 

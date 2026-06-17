@@ -84,4 +84,167 @@ class AppTextStyles {
     color: AppColors.primary,
   );
 
+// Home header — "Good morning,"
+  static TextStyle get greeting => TextStyle(
+    fontFamily: _font,
+    fontSize: 13.sp,
+    color: Colors.white.withOpacity(0.75),
+  );
+
+// Home header — "Muhammad 👋"
+  static TextStyle get greetingName => TextStyle(
+    fontFamily: _font,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.white,
+    letterSpacing: -0.3,
+  );
+
+// Home header — "Fri, 5 Jun" date pill
+  static TextStyle get datePill => TextStyle(
+    fontFamily: _font,
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
+  );
+
+// Section title — "Today's medicines", "Reminder Times"
+  static TextStyle get sectionTitle => TextStyle(
+    fontFamily: _font,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+// Medicine list row — "Paracetamol 500mg"
+  static TextStyle get medName => TextStyle(
+    fontFamily: _font,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+// Medicine list row — "8:00 AM · Tablet"
+  static TextStyle get medSub => TextStyle(
+    fontFamily: _font,
+    fontSize: 11.sp,
+    color: AppColors.textHint,
+  );
+
+// Status badge — "Taken", "Pending", "Missed"
+  static TextStyle get badge => TextStyle(
+    fontFamily: _font,
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w600,
+  );
+
+// Next dose card — "Paracetamol 500mg"
+  static TextStyle get ndhName => TextStyle(
+    fontFamily: _font,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.white,
+    letterSpacing: -0.3,
+  );
+
+// Next dose card — "1 Tablet · After meal"
+  static TextStyle get ndhSub => TextStyle(
+    fontFamily: _font,
+    fontSize: 11.sp,
+    color: Colors.white.withOpacity(0.75),
+  );
+
+// Next dose card — "2:00"
+  static TextStyle get ndhTime => TextStyle(
+    fontFamily: _font,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w800,
+    color: AppColors.white,
+  );
+
+// Next dose card — "AM" / "PM"
+  static TextStyle get ndhTimeAmPm => TextStyle(
+    fontFamily: _font,
+    fontSize: 9.sp,
+    fontWeight: FontWeight.w600,
+    color: Colors.white.withOpacity(0.75),
+  );
+
+// Next dose card — "NEXT DOSE" label
+  static TextStyle get ndhLabel => TextStyle(
+    fontFamily: _font,
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w700,
+    color: Colors.white.withOpacity(0.70),
+    letterSpacing: 0.1,
+  );
+
+// Progress card — "Today's progress", "3 of 5 taken"
+  static TextStyle get progressLabel => TextStyle(
+    fontFamily: _font,
+    fontSize: 12.sp,
+    color: AppColors.textMid,
+  );
+
+// Progress stat chip — "3", "2", "0" numbers
+  static TextStyle get statNum => TextStyle(
+    fontFamily: _font,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+// Progress stat chip — "Taken", "Pending", "Missed" labels
+  static TextStyle get statLbl => TextStyle(
+    fontFamily: _font,
+    fontSize: 10.sp,
+    color: AppColors.textHint,
+  );
+
+// Streak row — "7 days 🔥"
+  static TextStyle get streakNum => TextStyle(
+    fontFamily: _font,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.amberStrong,
+  );
+
+// Streak row — "Current streak — keep it up!"
+  static TextStyle get streakLbl => TextStyle(
+    fontFamily: _font,
+    fontSize: 11.sp,
+    color: AppColors.amberText,
+  );
+
+  // Form field label — "MEDICINE NAME"
+  static TextStyle get formLabel => TextStyle(
+    fontFamily: _font,
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textSecondary,
+    letterSpacing: 0.05,
+  );
+
+// Type chip label — "Tablet"
+  static TextStyle get chipLabel => TextStyle(
+    fontFamily: _font,
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHint,
+  );
+
+// Day chip label — "M", "T"
+  static TextStyle get dayChip => TextStyle(
+    fontFamily: _font,
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.primary,
+  );
+
+// Screen header title
+  static TextStyle get screenHeader => TextStyle(
+    fontFamily: _font,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
+  );
 }

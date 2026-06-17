@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'core/constants/app_colors.dart';
 import 'features/auth/controllers/auth_controller.dart';
+import 'features/medicine/controllers/medicine_controller.dart';
 import 'firebase_options.dart';
 import 'routes/app_routes.dart';
 
@@ -34,10 +34,12 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           initialBinding: BindingsBuilder(() {
-            Get.put(AuthController());
+            // Dono controllers ko permanent rakhen taake data sync rahe
+            Get.put(AuthController(), permanent: true);
+            Get.put(MedicineController(), permanent: true);
           }),
           getPages: AppRoutes.pages,
-          initialRoute: AppRoutes.splash,
+          initialRoute: AppRoutes.splash, 
         );
       },
     );

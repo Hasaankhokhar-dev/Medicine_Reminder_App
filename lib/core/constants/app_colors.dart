@@ -34,4 +34,17 @@ class AppColors {
   static const surface = Color(0xFFF5F9FF); // screen background
   static const white   = Color(0xFFFFFFFF); // card, textfield bg
   static const bgLight = Color(0xFFECF2FB); // section backgrounds
+
+  static const green         = Color(0xFF2E7D32);
+  static const greenBg       = Color(0xFFE8F5E9);
+  static const orange        = Color(0xFFE65100);
+  static const orangeBg      = Color(0xFFFFF3E0);
+  static const amber         = Color(0xFFF9A825);
+  static const amberBg       = Color(0xFFFFFDE7);
+  static const amberBorder   = Color(0xFFFFE082);
+  static const amberText     = Color(0xFFA17900);
+  static const amberStrong   = Color(0xFFF57F17);
+  static const blueLightBg   = Color(0xFFEBF3FF);
+  static const textMid       = Color(0xFF4A6080);
+  static const progressTrack = Color(0xFFE3EDF9);
 }
